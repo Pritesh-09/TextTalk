@@ -17,7 +17,23 @@ module.exports.create=function(req,res){
     if(req.body.password!=req.body.confirm_password){
         return res.redirect('back');
     }
-    console.log(req.body);
+    User.findOne({email:req.body.email}).then(function(user){
+            if(!user){
+                User.create(req.body).then(()=>{return res.redirect('/users/sign-in');}).catch(function(err){
+                    console.log("eroor in creation")
+                }
+                );
+                
+            }
+            else{
+                return res.redirect('back');
+            }
+        
+    }).catch(function(err){
+        console.log("eroor in creation")
+    }
+    );
+    
 };
 
 
