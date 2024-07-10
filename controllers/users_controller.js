@@ -5,10 +5,16 @@ module.exports.profile=function(req,res){
 };
 
 module.exports.signUp=function(req,res){
+    if(req.isAuthenticated()){
+        return res.redirect('users/profile');
+    }
     return res.render('user_sign_up');
 };
 
 module.exports.signIn=function(req,res){
+    if(req.isAuthenticated()){
+        return res.redirect('users/profile');
+    }
     return res.render('user_sign_in');
 };
 
@@ -40,5 +46,33 @@ module.exports.create=function(req,res){
 
 //signIn and create  session
 module.exports.createSession=function(req,res){
+<<<<<<< main
     //todo later
+=======
+    //find the user
+    User.findOne({email:req.body.email}).then(function(user){
+         //handle found
+        if(user){
+            //handle incorrect password
+            if(user.password!=req.body.password){
+                return res.redirect('back');
+            }
+            //handle session creation
+            res.cookie('user_id',user.id);
+            return res.redirect('/users/profile');
+
+        }
+        else{
+             //handle not found
+             return res.redirect('back');
+        }
+    }).catch(function(err){
+       
+        console.log("error in find user in sign-in");
+    });
+
+};
+module.exports.createsession=function(req,res){
+    return res.redirect('/');
+>>>>>>> local
 };
